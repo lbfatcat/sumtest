@@ -1,7 +1,7 @@
 #include<stdio.h>
-#include<stdlib.h>
-#define UP_BOUND 10
-#define LOW_BOUND 0
+#include<stdlib.h> /* use the rand function */
+#define UP_BOUND 10 /* the smallest integer for the addition test */
+#define LOW_BOUND 0 /* the largest integer for the addition test */
 
 int main(int argc, char*argv[])
 {
@@ -9,12 +9,12 @@ int main(int argc, char*argv[])
   printf("你好果果，欢迎进入加法测试！\n");
   printf("****************************\n");
 
-  int iRound=0;
-  int iCorrect=0;
+  int iRound=0; /* the round count */
+  int iCorrect=0; /* the number of correct hits */
   float fCorrectRatio=0.00;
-  int iOp1, iOp2;
-  int iInput;
-  int iContinue=1;
+  int iOp1, iOp2; /* the two addition operands */
+  int iInput;					/* the integer for input */
+  int iContinue=1;				/* the flag controlling the test loop, default to be true */
   while(iContinue)
   {
     /* iOp1= (UP_BOUND-LOW_BOUND)*rand(); 
