@@ -1,0 +1,16 @@
+Initiation:
+* the current program only do simple addtition excercises with a single loop;
+* lack excercise varation, such as: ()+2=10, 2+()=4, or 2+4=();
+* I want to introduce excercise types, such that different types of excercises can appear in randomized fashion;
+
+Design Key Points:
+* introduce an extra abstraction by designing the function: generateExercise;
+* in every loop, the main module invoke the generateExcercise function call to abtain a exercise string as well as the answer number;
+* after receiving the user's input number, the main module compare the input number with the answer number returned by the generateExcercise function call; 
+* Excercise Types:
+    -> typeID:1, ()+op1= op2; but op1<=op2, with op1 and op2 both fall between [LOW_BOUND,UP_BOUND] 
+    -> typeID:2, op1+()= op2; but op1<=op2, with op1 and op2 both fall between [LOW_BOUND,UP_BOUND] 
+    -> typeID:3, op1+op2=(); with op1 and op2 both fall between [LOW_BOUND,UP_BOUND] 
+* Interface Design:
+    -> int generateExcercise(int typeID, char * pExString);
+    -> return value: the answer number of the returned excercise; 
