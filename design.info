@@ -12,5 +12,10 @@ Design Key Points:
     -> typeID:2, op1+()= op2; but op1<=op2, with op1 and op2 both fall between [LOW_BOUND,UP_BOUND] 
     -> typeID:3, op1+op2=(); with op1 and op2 both fall between [LOW_BOUND,UP_BOUND] 
 * Interface Design:
-    -> int generateExcercise(int typeID, char * pExString);
-    -> return value: the answer number of the returned excercise; 
+    -> int generateExcercise(char * pExString);
+    -> return value: the answer number of the returned excercise; -1, if anything goes wrong;
+
+Details:
+* main module is modified to get rid of the specifics of different types of excercises;
+* introduce the MAX_BUF macro to correspond to the static string holding the excercise;
+* in generateExcercise function, first randomly generate a type, then use a switch statement to generate specific excercise;

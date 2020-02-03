@@ -2,6 +2,10 @@
 #include<stdlib.h> /* use the rand function */
 #define UP_BOUND 10 /* the smallest integer for the addition test */
 #define LOW_BOUND 0 /* the largest integer for the addition test */
+#define BUF_LENGTH 20 /* the MAX length of the excercise */
+
+int generateExcercise(char *pExString);
+int resetBuffer(char * pBuf, int length);
 
 int main(int argc, char*argv[])
 {
@@ -12,18 +16,22 @@ int main(int argc, char*argv[])
   int iRound=0; /* the round count */
   int iCorrect=0; /* the number of correct hits */
   float fCorrectRatio=0.00;
-  int iOp1, iOp2; /* the two addition operands */
+
   int iInput;					/* the integer for input */
   int iContinue=1;				/* the flag controlling the test loop, default to be true */
+  char exString[BUF_LENGTH];
+  int iAnswer;
   while(iContinue)
   {
-    /* iOp1= (UP_BOUND-LOW_BOUND)*rand(); 
-    iOp2= (UP_BOUND-LOW_BOUND)*rand(); */
-    iOp1= rand()%UP_BOUND +1;
-    iOp2= rand()%UP_BOUND +1;
-    
-    printf("第%d轮：请计算如下两个数字的和O(∩_∩)O\n",iRound+1);
-    printf("%d + %d = ? 请果果输入结果：\n",iOp1,iOp2);
+    resetBuffer(exString,BUF_LENGTH);
+    iAnswer=generateExcercise(exString);   
+    if(iAnswer==-1)
+    {
+        printf("出题错误，系统异常退出！┭┮﹏┭┮\n\n");
+        return -1;
+    }
+    printf("第%d轮：请计算:  \n",iRound+1);
+    printf("%s ? 请果果输入结果：\n",exString);
     while(1){
       scanf("%d",&iInput);
       if(iInput>= LOW_BOUND && iInput<= UP_BOUND*2)
@@ -31,7 +39,7 @@ int main(int argc, char*argv[])
       else
         printf("果果，请输入个合理的结果哦，再输入一个结果：\n");
     }
-    if(iInput== iOp1+iOp2) /* a correct hit */
+    if(iInput== iAnswer) /* a correct hit */
     {
       iRound++;
       iCorrect++;
@@ -57,4 +65,54 @@ int main(int argc, char*argv[])
     iContinue= iInput;
   }
 
+}
+
+
+int resetBuffer(char * pBuf, int length)
+{
+    if(length<=0)
+      return -1;
+    int i=0;
+    while(i<length)
+      pBuf[i++]='\0';
+    return 0;
+}
+
+int generateExcercise(char *pExString)
+{
+   int iOp1, iOp2; /* the two addition operands */
+   int iAnswer;
+    int iTypeID= rand()%3+1; /* randomly generate the excercise type */
+    switch(iTypeID)
+    {
+      case 1: /* type 1: ()+op1=op2  */    
+        while(1){ /* generate qualified operands */
+            iOp1= rand()%UP_BOUND +1;
+            iOp2= rand()%UP_BOUND +1;
+            if(iOp1<iOp2)
+              break;
+        }
+        sprintf(pExString,"( )+%d=%d",iOp1,iOp2);
+        iAnswer= iOp2-iOp1; 
+        break;
+      case 2: /* type 2: op1+()=op2 */
+        while(1){ /* generate qualified operands */
+            iOp1= rand()%UP_BOUND +1;
+            iOp2= rand()%UP_BOUND +1;
+            if(iOp1<iOp2)
+              break;
+        }
+        sprintf(pExString,"%d+( )=%d",iOp1,iOp2);
+        iAnswer= iOp2-iOp1;
+        break;
+      case 3: /* type 3: op1+op2=() */
+        iOp1= rand()%UP_BOUND +1;
+        iOp2= rand()%UP_BOUND +1;
+        sprintf(pExString,"%d+%d=( )",iOp1,iOp2);
+        iAnswer= iOp1+iOp2;
+        break;
+      default:
+        iAnswer= -1;;
+    }  
+    return iAnswer;
 }
