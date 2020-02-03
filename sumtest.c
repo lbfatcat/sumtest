@@ -30,8 +30,11 @@ int main(int argc, char*argv[])
         printf("出题错误，系统异常退出！┭┮﹏┭┮\n\n");
         return -1;
     }
-    printf("第%d轮：请计算:  \n",iRound+1);
+
+    printf("\n***** 第%d轮 *******\n",iRound+1);
+    printf("请计算:  \n");
     printf("%s ? 请果果输入结果：\n",exString);
+    printf("Eason: ");
     while(1){
       scanf("%d",&iInput);
       if(iInput>= LOW_BOUND && iInput<= UP_BOUND*2)
