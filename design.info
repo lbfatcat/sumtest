@@ -1,3 +1,38 @@
+
+--------------------
+2020.01.03 20:00
+Initiation:
+* the result diplay is too naive, the correct rate display is awful with a simple float number diplay;
+
+Design Key Points:
+* introduce an extra abstraction by designing the function: getResult;
+* in very loop, the main module provide getResult with round count, current excercise result (right/wrong), the whole result computing chores are left to getResult, which return a retult string for the main module to diplay.
+* interface design: int getResult(int iFull,char *pResult);
+* int iFullFlag: flag indicating whether or not a full and detailed report is required;
+* char *pResult: the result string, which need to be first reset with restBuffer function to clean the previously stored characters; 
+
+Details:
+* the round count need referenced by both the main and getResult modules, therefore the round count number can be set as a static int with the sumtest module to save the need to transfer it through inner functions within sumtest module.   ---> so the   static int glbRoundCount;
+* the COMPACT result shown at the end of each loop can be of the following form:
+    "   ---------------------------------------
+        COUNT:20    CORRECT:10  RATIO:50.00 %
+    "   ---------------------------------------
+* the FULL result can be of the following form:
+    "   ---------------------------------------
+        TYPE        COUNT   CORRECT     RATIO
+        ----------------------------------------
+        ()+op1=op2  10      8           80.00%
+        op1+()=op2  10      10          100.00%
+        op1+op2=()  20      5           25.00%
+        ----------------------------------------
+        SUM         40      23          57.50%
+
+Technical Difficulties:
+* how to convert float point numbers to percentage representational strings;
+* how to do tablet fashion display;
+        
+ --------------------
+2020.01.03 19:00
 Initiation:
 * the current program only do simple addtition excercises with a single loop;
 * lack excercise varation, such as: ()+2=10, 2+()=4, or 2+4=();

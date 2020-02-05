@@ -56,10 +56,10 @@ int main(int argc, char*argv[])
     }
     if(iRound<=20)
       continue;
-    printf("果果，还要继续吗？继续请输入1，停止请输入0\n");
+    printf("果果，还要继续吗？继续请输入1，停止请输入2\n");
     while(1){
       scanf(" %d",&iInput);
-      if(iInput!=0 && iInput!=1){
+      if(iInput!=1 && iInput!=2){
         printf("果果，请进行合理输入哦。继续请输入1，停止请输入0\n");
       }else{
         break;
