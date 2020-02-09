@@ -29,6 +29,7 @@ Details:
 
 Technical Difficulties:
 * how to convert float point numbers to percentage representational strings;
+    - it's EASY to do it through %.2f flag in the printf function call.
 * how to do tablet fashion display;
         
  --------------------
