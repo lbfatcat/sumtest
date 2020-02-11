@@ -9,9 +9,16 @@
 #define TYPE_2_STR "op1+()=op2"
 #define TYPE_3_STR "op1+op2=()"
 
+static struct _TEST_RESULT{
+	int iTotal;		// the total count of excercises;
+	int iCorrect1;	// correct hits of type 1 excersices;
+	int iCorrect2;	// correct hits of type 2 excersices;
+	int iCorrect3;	// correct hits of type 3 excersices;
+} gTestResult;
+
 static char pResult[200];
 
-int generateExcercise(char *pExString);
+int generateExcercise(char *pExString,int * pTypeID);
 int resetBuffer(char * pBuf, int length);
 int getShortResult(int iTotal, int iCorrect, char *pRstString);
 
@@ -22,17 +29,24 @@ int main(int argc, char*argv[])
   printf("****************************\n");
 
   int iRound=0; /* the round count */
+  gTestResult.iTotal=0;
+  
   int iCorrect=0; /* the number of correct hits */
+  gTestResult.iCorrect1=0;
+  gTestResult.iCorrect2=0;
+  gTestResult.iCorrect3=0;
+
   float fCorrectRatio=0.00;
 
   int iInput;					/* the integer for input */
   int iContinue=1;				/* the flag controlling the test loop, default to be true */
   char exString[BUF_LENGTH];
   int iAnswer;
+  int iTypeID;
   while(iContinue)
   {
     resetBuffer(exString,BUF_LENGTH);
-    iAnswer=generateExcercise(exString);   
+    iAnswer=generateExcercise(exString,&iTypeID);   
     if(iAnswer==-1)
     {
         printf("出题错误，系统异常退出！┭┮﹏┭┮\n\n");
@@ -53,28 +67,48 @@ int main(int argc, char*argv[])
     if(iInput== iAnswer) /* a correct hit */
     {
       iRound++;
+	  gTestResult.iTotal++;
+
+
       iCorrect++;
       fCorrectRatio= 1.00*iCorrect/iRound;
-      //printf("恭喜果果，答对了！\n总题目数：%d,做对题目数：%d,正确率是：%f\n\n\n",iRound,iCorrect,fCorrectRatio);
+
+	  switch(iTypeID){
+		  case 1:
+			  gTestResult.iCorrect1++;
+			  break;
+		  case 2:
+			  gTestResult.iCorrect2++;
+			  break;
+		  case 3:
+			  gTestResult.iCorrect3++;
+			  break;
+		  default:
+			  printf("exercise type id illegal.\n");
+			  return -1;
+	  }
+
       printf("恭喜果果，答对了！\n");
-      if(getShortResult(iRound,iCorrect,pResult)==-1){
-        printf("%s\n",pResult);
-        return -1;
-      }
-      printf("%s",pResult);
     }
-    else{
+    else{ /* a false hit */
       iRound++;
+	  gTestResult.iTotal++;
+
       fCorrectRatio= 1.00*iCorrect/iRound;
-      /* old version of printing result in each loop */
-      // printf("额。。。答错了！\n总题目数：%d,做对题目数：%d,正确率是：%f\n\n\n",iRound,iCorrect,fCorrectRatio);
+
       printf("额。。。答错了！\n");
-      if(getShortResult(iRound,iCorrect,pResult)==-1){
-        printf("%s\n",pResult);
-        return -1;
-      }
-      printf("%s",pResult);
+
     }
+
+
+    if(getShortResult(gTestResult.iTotal,
+				      gTestResult.iCorrect1 + gTestResult.iCorrect2 + gTestResult.iCorrect3,
+					  pResult)==-1){
+		printf("%s\n",pResult);
+        return -1;
+	}
+    printf("%s",pResult);
+
     if(iRound<=20)
       continue;
     printf("果果，还要继续吗？继续请输入1，停止请输入2\n");
@@ -106,6 +140,19 @@ int getShortResult(int iTotal, int iCorrect, char *pRstString)
   return 0;
 }
 
+int getFullReport(char *pRptString)
+{
+	if(gTestResult.iTotal<0 ||
+	   gTestResult.iCorrect1<0 ||
+	   gTestResult.iCorrect2<0 ||
+	   gTestResult.iCorrect3<0){
+		sprintf(pRptString,"illegal aruments input for getFullReport function call");
+        return -1;
+	}
+	return 0;
+}
+
+
 int resetBuffer(char * pBuf, int length)
 {
     if(length<=0)
@@ -116,11 +163,14 @@ int resetBuffer(char * pBuf, int length)
     return 0;
 }
 
-int generateExcercise(char *pExString)
+
+int generateExcercise(char *pExString, int *pType)
 {
    int iOp1, iOp2; /* the two addition operands */
    int iAnswer;
     int iTypeID= rand()%3+1; /* randomly generate the excercise type */
+	(*pType)= iTypeID;
+
     switch(iTypeID)
     {
       case 1: /* type 1: ()+op1=op2  */    
